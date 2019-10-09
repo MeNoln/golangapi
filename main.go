@@ -4,19 +4,26 @@ import (
 	"log"
 
 	"github.com/MeNoln/golangapi/db"
-	"github.com/MeNoln/golangapi/handlers"
+	TodoHandler "github.com/MeNoln/golangapi/handlers"
 	"github.com/gin-gonic/gin"
 )
+
+func todoRoutes(router *gin.Engine) {
+	router.GET("api/v1/todos", TodoHandler.GetTodos)
+	router.GET("api/v1/todo/:id", TodoHandler.GetTodo)
+	router.POST("api/v1/todo", TodoHandler.PostTodo)
+	router.PUT("api/v1/todo/:id", TodoHandler.PutTodo)
+	router.DELETE("api/v1/todo/:id", TodoHandler.RemoveTodo)
+}
 
 func main() {
 	log.Println("Starting server")
 
 	db.InitializeDB()
 
-	router := gin.Default()
+	router := gin.New()
 
-	router.GET("/api/todos", handlers.GetTodos)
-	router.GET("/api/todo/:id", handlers.GetTodo)
+	todoRoutes(router)
 
 	router.Run(":7000")
 }
