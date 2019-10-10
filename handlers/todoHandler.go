@@ -43,7 +43,7 @@ func PostTodo(c *gin.Context) {
 		})
 	}
 
-	err := providers.CreateTodo(data)
+	err := providers.CreateTodo(&data)
 	if err != nil {
 		c.JSON(400, gin.H{"message": "Bad request"})
 	}
@@ -73,7 +73,7 @@ func PutTodo(c *gin.Context) {
 		})
 	}
 
-	err = providers.UpdateTodo(data)
+	err = providers.UpdateTodo(&data)
 	if err != nil {
 		c.JSON(400, gin.H{"message": "Bad request"})
 	}

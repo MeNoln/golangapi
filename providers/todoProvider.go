@@ -46,12 +46,17 @@ func GetCurrentTodo(id int) (models.Todo, error) {
 }
 
 //CreateTodo ...
-func CreateTodo(data models.Todo) error {
+func CreateTodo(data *models.Todo) error {
 	data.DateCreated = time.Now()
 	db := db.GetDb()
 	defer db.Close()
 
-	_, err := db.Exec("insert into todo (description, datecreated) values ($1, $2)", data.Description, data.DateCreated)
+	queryArgs := []interface{}{
+		data.Description,
+		data.DateCreated,
+	}
+
+	_, err := db.Exec("insert into todo (description, datecreated) values ($1, $2)", queryArgs...)
 	if err != nil {
 		log.Fatalln("Failed to insert")
 		return err
@@ -60,12 +65,18 @@ func CreateTodo(data models.Todo) error {
 }
 
 //UpdateTodo ...
-func UpdateTodo(data models.Todo) error {
+func UpdateTodo(data *models.Todo) error {
 	data.DateCreated = time.Now()
 	db := db.GetDb()
 	defer db.Close()
 
-	_, err := db.Exec("update todo set description = $1, datecreated = $2 where id = $3", data.Description, data.DateCreated, data.ID)
+	queryArgs := []interface{}{
+		data.Description,
+		data.DateCreated,
+		data.ID,
+	}
+
+	_, err := db.Exec("update todo set description = $1, datecreated = $2 where id = $3", queryArgs...)
 	if err != nil {
 		log.Fatalln("Failed to update")
 		return err
